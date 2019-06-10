@@ -24,7 +24,7 @@ SECRET_KEY = '%u#fz2v-en1hs5k@b+0#u3uv=q*ufhs@@vl_0z8%8g=*2cb&eu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1","geekspost.herokuapp.com"]
+ALLOWED_HOSTS = [u"geekspost.herokuapp.com",u"127.0.0.1"]
 
 # Application definition
 
@@ -142,5 +142,5 @@ MEDIA_URL = "/media/"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-#EMAIL_HOST_USER = os.environ['EMAIL'] #set on server
-#EMAIL_HOST_PASSWORD = os.environ['PASSWORD'] #set on server
+EMAIL_HOST_USER = os.environ['EMAIL'] #set on server
+EMAIL_HOST_PASSWORD = os.environ['PASSWORD'] #set on server
