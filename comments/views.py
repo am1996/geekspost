@@ -8,10 +8,14 @@ from django.urls import reverse,reverse_lazy
 # Create your views here.
 class DeleteComment(generic.edit.DeleteView):
 	model=Comments
+	template_name = "comments_confirm_delete.html"
 	def get_success_url(self):
-		post_id = self.get_object().object_id
-		post_slug = Posts.objects.get(pk = post_id).slug
-		return reverse("posts:post_detail",kwargs={"slug":post_slug})
+		try:
+			post_id = self.get_object().object_id
+			post_slug = Posts.objects.get(pk = post_id).slug
+			return reverse("posts:post_detail",kwargs={"slug":post_slug})
+		except Exception as e:
+			return reverse("posts:dashboard",kwargs={"username":self.request.user})
 	def dispatch(self,request,*args,**kwargs):
 			comment = Comments.manager.get(pk = kwargs['pk'])
 			if comment.user != request.user:

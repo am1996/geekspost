@@ -26,7 +26,7 @@ class Posts(models.Model):
 	height_field= models.IntegerField(default=0)
 	paragraph = models.TextField(null=True,blank=True)
 	slug = models.SlugField(unique=True,null=True)
-	user = models.ForeignKey(User,default=1)
+	user = models.ForeignKey(User,default=1, on_delete=models.CASCADE)
 	date = models.DateTimeField(auto_now_add=True)
 
 	def save(self,*args,**kwargs):

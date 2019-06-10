@@ -4,14 +4,12 @@
 {% block title %}post | Details{% endblock %}
 {% block content %}
 	<style type="text/css">
-		form:not(.navbar-form){
-			float:right;
-		}
-		.buttons.btn-group{
+		.right{
 			float:right;
 		}
 		.btn-info,.btn-danger{
 			border-radius: 0;
+			float:left;
 		}
 	</style>
 	<div class="container">	
@@ -31,20 +29,10 @@
 	  		</footer>
 		</blockquote>
 		{% if request.user == post.user %}
-		<div class="buttons btn-group">
-			<form action="{% url 'posts:post_edit' post.slug %}" method="post">
-				{% csrf_token %}
-				<button type="submit" class="btn btn-info">
-					Edit
-				</button>
-			</form>
-			<form action="{% url 'posts:post_delete' post.slug %}" method="post">
-				{% csrf_token %}
-				<button type="submit" class="btn btn-danger">
-					Delete
-				</button>
-			</form>
-		</div>
+			<p class="right">
+				<a href="{% url 'posts:post_edit' post.slug %}" class="btn btn-info" role="button">Edit</a>
+				<a href="{% url 'posts:post_delete' post.slug %}" class="btn btn-danger" role="button">Delete</a>
+			</p>
 		{% endif %}
 		<br>
 		<!-- comment section -->

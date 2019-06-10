@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
 {% load widget_tweaks %}
 {% load filters %}
 {% block title %}{{request.user}} | Dashboard{% endblock %}
 {% block content %}
+<style>
+	.right{float:right;}
+	.def-col{color:#8a6d3b;}
+</style>
 <div class="container">
 	<!-- edit user info section -->
 	<a class="btn btn-primary" href="{% url 'posts:edit_user' request.user.username %}">
@@ -21,31 +26,10 @@
 								{{comment.content_object.title|lower}}
 							</a>
 							{% if request.user == comment.user %}
-							<form style="float:right;" method="post" 
-							action="{% url 'comments:comment_delete' comment.pk %}">
-								{% csrf_token %}
-								<input type="hidden" name="next" value="{{ request.path }}">
-								<button style="
-								background:none;
-								border:none;
-								color:grey;
-								margin:0;
-								padding:0;" type="submit">
-									<span class="glyphicon glyphicon-trash"></span>
-								</button>
-							</form>
-							<form style="float:right;" method="post" 
-							action="{% url 'comments:comment_edit' comment.pk %}">
-								{% csrf_token %}
-								<button style="
-								background:none;
-								border:none;
-								color:grey;
-								margin:0 10px;
-								padding:0;" type="submit">
-									<span class="glyphicon glyphicon glyphicon-edit"></span>
-								</button>
-							</form>
+							<p class="right">
+								<a class="def-col" href="{% url 'comments:comment_delete' comment.pk %}"><span class="glyphicon glyphicon-trash"></span></a>
+								<a class="def-col" href="{% url 'comments:comment_edit' comment.pk %}"><span class="glyphicon glyphicon-edit"></span></a>
+							</p>
 							{% endif %}
 						</h3>
 					</div>
@@ -66,8 +50,10 @@
 			{% for post in request.user.posts_set.all %}
 				<div class="post col-sm-6 col-md-6">
 					<div class="thumbnail">
-						{% if post.img != "" %}
-						<img src="{{post.image.url}}" alt="image">
+						{% if post.img %}
+							<img src="{{post.image.url}}" alt="image">
+						{% else %}
+							<img src="{% static 'placehold.png' %}" alt="image">
 						{% endif %}
 					</div>
 					<div class="caption">
