@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '%u#fz2v-en1hs5k@b+0#u3uv=q*ufhs@@vl_0z8%8g=*2cb&eu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [u"geekspost.herokuapp.com",u"127.0.0.1"]
 
@@ -129,7 +129,7 @@ USE_TZ = True
 #static url
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/var/www/static/',
@@ -143,5 +143,5 @@ MEDIA_URL = "/media/"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ['EMAIL'] #set on server
-EMAIL_HOST_PASSWORD = os.environ['PASSWORD'] #set on server
+#EMAIL_HOST_USER = os.environ['EMAIL'] #set on server
+#EMAIL_HOST_PASSWORD = os.environ['PASSWORD'] #set on server
