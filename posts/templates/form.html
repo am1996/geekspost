@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}
+{% if "register" in request.path %}
+Sign up
+{% elif "login" in request.path %}
+Login
+{% elif "add" in request.path %}
+add
+{% endif %}
+{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+	<div class="container">
+		<form action="" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="well">
+				<div class="row">
+					<div class="col-md-6 col-md-offset-3">
+					{% for field in form %}
+						{{field.label_tag}}
+						<br>
+						{{field|add_class:"form-control"}}
+					{% endfor %}
+					</div>
+				</div>
+				<br>
+				<center>
+					{% if error %}
+					<div class="row">
+						<div class="col-md-6 col-md-offset-3">
+							<div class="alert alert-danger">
+								{{error}}
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					{% if "login" in request.path %}
+						<input class="btn btn-warning" type="submit" value="Login" name="submit">
+					{% else %}
+						<input class="btn btn-danger" type="submit" value="Register" name="submit">
+					{% endif %}
+				</center>
+			</div>
+		</form>
+	</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+<style type="text/css">
+</style>
+{% block title %}post | Details{% endblock %}
+{% block content %}
+	<style type="text/css">
+		form:not(.navbar-form){
+			float:right;
+		}
+		.buttons.btn-group{
+			float:right;
+		}
+		.btn-info,.btn-danger{
+			border-radius: 0;
+		}
+	</style>
+	<div class="container">	
+		<h2>{{ post.title }}</h2>
+		<hr>
+		{% if post.image %}
+			<img class="img-responsive" src="{{ post.image.url }}">
+		{% endif %}
+		<blockquote class="blockquote">
+	  		<p class="mb-0">
+	  			{{ post.paragraph|safe|linebreaks}}
+	  		</p>
+	  		<footer class="text-muted blockquote-footer">
+	  			Author: {{post.user}}
+	  			<br>
+	  			Post at: {{post.date}}
+	  		</footer>
+		</blockquote>
+		{% if request.user == post.user %}
+		<div class="buttons btn-group">
+			<form action="{% url 'posts:post_edit' post.slug %}" method="post">
+				{% csrf_token %}
+				<button type="submit" class="btn btn-info">
+					Edit
+				</button>
+			</form>
+			<form action="{% url 'posts:post_delete' post.slug %}" method="post">
+				{% csrf_token %}
+				<button type="submit" class="btn btn-danger">
+					Delete
+				</button>
+			</form>
+		</div>
+		{% endif %}
+		<br>
+		<!-- comment section -->
+		<div>
+			<h3>Comments</h3>
+			{# TODO: pass in the comments from postDetail view #}
+			{% for comment in comments %}
+				<div class="panel panel-warning">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<a href="#">
+								{{comment.user.username}}
+							</a>
+						{% if request.user == comment.user %}
+						<form style="float:right;" method="post" 
+						action="{% url 'comments:comment_delete' comment.pk %}">
+							{% csrf_token %}
+							<input type="hidden" name="next" value="{{ request.path }}">
+							<button style="
+							background:none;
+							border:none;
+							color:grey;
+							margin:0;
+							padding:0;" type="submit">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+						</form>
+						<form style="float:right;" method="post" 
+						action="{% url 'comments:comment_edit' comment.pk %}">
+							{% csrf_token %}
+							<button style="
+							background:none;
+							border:none;
+							color:grey;
+							margin:0 10px;
+							padding:0;" type="submit">
+								<span class="glyphicon glyphicon glyphicon-edit"></span>
+							</button>
+						</form>
+						{% endif %}
+						</h3>
+					</div>
+					<div class="panel-body">
+						{{comment.paragraph}}
+						<div class="text-muted">
+							{{comment.time}}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		<!-- comment section end -->
+
+		<!-- make new comment -->
+		<form id="createcomment" action="{% url 'posts:CreateComment' post.slug %}" method="post">
+			{% csrf_token %}
+			<div class="input-group">
+				<input name="paragraph" type="text" class="form-control" placeholder="What do you think?">
+				<span class="input-group-btn">
+				<button class="btn btn-warning" type="submit">Comment</button>
+				</span>
+			</div>
+		</form>
+		<!-- make new comment end -->
+	</div>
+{% endblock %}

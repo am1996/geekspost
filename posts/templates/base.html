@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style type="text/css">
+		@font-face{
+			font-family:"Dopestyle";
+			src:url({% static 'Dopestyle.ttf' %}) format("truetype");
+		}
+		*{
+			word-wrap:break-word;
+		}
+		a{
+			text-decoration: none;
+		}
+		a.navbar-brand{
+			font-family:"Dopestyle";
+		}
+		.navbar-form input{
+			float:left !important;
+		}
+		@media screen and (max-width:768px){
+			form.navbar-form input[type="text"]{
+				width:100% !important;
+				clear:both !important;
+			}
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<!-- button -->
+			<div class="navbar-header navbar-left"> 
+				<button type="button" class="collapsed navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false"> 
+					<span class="sr-only">Toggle navigation</span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+				</button> 
+				<a href="{% url 'posts:index' %}" class="navbar-brand">
+					GeeksBlog
+				</a>
+			</div>
+			<!-- button end -->
+
+			<!-- collapsable navbar links -->
+			<div class="collapse navbar-collapse" id="bs-toggle">
+				{% if not request.user.is_authenticated %}
+				<ul class="nav navbar-nav navbar-right" style="visibility: visible;">
+					<li><a href="{% url 'posts:register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+					<li><a href="{% url 'posts:login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</ul>
+				{% else %}
+				<ul class="nav navbar-nav navbar-right" style="visibility: visible;">
+					<li><a href="{% url 'posts:logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+					<li>
+						<a href="{% url 'posts:dashboard' request.user %}" class="navbar-link">
+							Signed in as {{request.user.username}}
+						</a>
+					</li>
+				</ul>
+				{% endif %}
+				<form action="{% url 'posts:index' %}" class="navbar-form">
+					<div class="input-group">
+						<input style="width:200px;" name="q" type="text" class="form-control" placeholder="Search">
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-default">
+								<span class="glyphicon glyphicon-search"></span>
+							</button>
+						</span>
+					</div>
+				</form>
+			</div>
+		</div>
+	</nav>
+	{% block content %}
+	{% endblock %}
+	<script type="text/javascript">
+		$("form.navbar-form input[type='text']").on("focus",function(){
+			if(window.innerWidth > 768){
+				$("input[type='text']","form.navbar-form").animate({
+					"width":"400px"
+				},200);
+			}
+		});
+		$("form.navbar-form input[type='text']").on("blur",function(){
+			if(window.innerWidth > 768){
+				$("input[type='text']","form.navbar-form").animate({
+					"width":"200px"
+				},200);
+			}
+		});
+	</script>
+</body>
+</html>

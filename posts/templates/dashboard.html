@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load filters %}
+{% block title %}{{request.user}} | Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+	<!-- edit user info section -->
+	<a class="btn btn-primary" href="{% url 'posts:edit_user' request.user.username %}">
+		Edit user Info
+	</a>
+	<!-- edit user section end -->
+	<div class="row">
+		<!-- comments -->
+		<div class="col-md-6 col-sm-12">
+			<h3 class="page-header">Your Comments:</h3>
+			{% for comment in request.user.comments_set.all %}
+				<div class="panel panel-warning">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<a href="/posts/{{comment.content_object.slug|lower}}">
+								{{comment.content_object.title|lower}}
+							</a>
+							{% if request.user == comment.user %}
+							<form style="float:right;" method="post" 
+							action="{% url 'comments:comment_delete' comment.pk %}">
+								{% csrf_token %}
+								<input type="hidden" name="next" value="{{ request.path }}">
+								<button style="
+								background:none;
+								border:none;
+								color:grey;
+								margin:0;
+								padding:0;" type="submit">
+									<span class="glyphicon glyphicon-trash"></span>
+								</button>
+							</form>
+							<form style="float:right;" method="post" 
+							action="{% url 'comments:comment_edit' comment.pk %}">
+								{% csrf_token %}
+								<button style="
+								background:none;
+								border:none;
+								color:grey;
+								margin:0 10px;
+								padding:0;" type="submit">
+									<span class="glyphicon glyphicon glyphicon-edit"></span>
+								</button>
+							</form>
+							{% endif %}
+						</h3>
+					</div>
+					<div class="panel-body">
+						{{comment.paragraph}}
+						<div class="text-muted">
+							{{comment.time}}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		<!-- comments end -->
+		<!-- posts section -->
+		<div class="col-md-6 col-sm-12">
+			<h3 class="page-header">Your Posts:</h3>
+			<div class="row">
+			{% for post in request.user.posts_set.all %}
+				<div class="post col-sm-6 col-md-6">
+					<div class="thumbnail">
+						{% if post.img != "" %}
+						<img src="{{post.image.url}}" alt="image">
+						{% endif %}
+					</div>
+					<div class="caption">
+						<h3>
+							<a href="/posts/{{post.slug}}">
+								{{post.title}}
+							</a>
+						</h3>
+						<p>{{post.paragraph|truncatechars:70}}</p>
+						<p>
+							<a href="{% url 'posts:post_edit' post.slug %}" class="btn btn-warning" role="button">Edit</a>
+							<a href="{% url 'posts:post_delete' post.slug %}" class="btn btn-danger" role="button">Delete</a>
+						</p>
+					</div>
+				</div>
+				{% with request.user.posts_set.all as posts %}
+					{% if posts|index:post != 0 %}
+						<div class="clearfix"></div>
+					{% endif %}
+				{% endwith %}
+			{% endfor %}
+			</div>
+		</div>
+		<!-- comments section end -->
+	</div>
+</div>
+{% endblock %}

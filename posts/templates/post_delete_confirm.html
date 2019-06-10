@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load filters %}
+{% block title %}{{request.user}} | Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+	<h2>Are you sure you want to delete this post?</h2>
+	<form action="" method="POST">
+		{% csrf_token %}
+		<input type="submit" class="btn btn-primary" value="Confirm" name="confirm_delete" />
+		<input type="submit" class="btn btn-primary" value="Cancel" name="cancel"/>
+	</form>
+</div>
+{% endblock %}
